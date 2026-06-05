@@ -1,0 +1,36 @@
+---
+title: "ENVS 193DS Final"
+author: "Michael Torbensen"
+date: June 05, 2026
+format:
+  html:
+    toc: TRUE
+    execute: 
+      message: FALSE
+      warning: FALSE
+---
+
+[Github Repository](https://github.com/michaeltorbensen/ENVS-193DS_spring-2026_final.git)
+
+```{r}
+#| label: loading in packages and data
+library(tidyverse)
+library(janitor)
+library(here)
+library(readxl)
+library(ggeffects)
+library(MuMIn) # model selection
+library(DHARMa)
+library(gtsummary)
+library(rstatix)
+
+# reading in data 
+
+bike_data <- read.csv(here::here("data/personal_data.csv"))
+nest_data <- read.csv(here::here("data/nest_data_final.csv"))
+
+```
+
+
+
+
