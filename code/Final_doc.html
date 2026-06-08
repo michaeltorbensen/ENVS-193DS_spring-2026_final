@@ -81,8 +81,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <body class="quarto-light">
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-<div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-  
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#set-up" id="toc-set-up" class="nav-link active" data-scroll-target="#set-up">Set-Up</a></li>
+  <li><a href="#problem-1.-research-writing" id="toc-problem-1.-research-writing" class="nav-link" data-scroll-target="#problem-1.-research-writing">Problem 1. Research Writing</a>
+  <ul class="collapse">
+  <li><a href="#a.-transparent-statistical-methods" id="toc-a.-transparent-statistical-methods" class="nav-link" data-scroll-target="#a.-transparent-statistical-methods">a. Transparent statistical methods</a></li>
+  <li><a href="#b.-suggestions-for-rewriting" id="toc-b.-suggestions-for-rewriting" class="nav-link" data-scroll-target="#b.-suggestions-for-rewriting">b. Suggestions for rewriting</a></li>
+  <li><a href="#c.-further-analysis" id="toc-c.-further-analysis" class="nav-link" data-scroll-target="#c.-further-analysis">c.&nbsp;Further analysis</a></li>
+  </ul></li>
+  <li><a href="#problem-2.-data-analysis" id="toc-problem-2.-data-analysis" class="nav-link" data-scroll-target="#problem-2.-data-analysis">Problem 2. Data Analysis</a>
+  <ul class="collapse">
+  <li><a href="#a.-clean-and-wrangle" id="toc-a.-clean-and-wrangle" class="nav-link" data-scroll-target="#a.-clean-and-wrangle">a. Clean and wrangle</a></li>
+  </ul></li>
+  <li><a href="#b.-response-variable" id="toc-b.-response-variable" class="nav-link" data-scroll-target="#b.-response-variable">b. Response variable</a></li>
+  <li><a href="#c.-purpose-of-study" id="toc-c.-purpose-of-study" class="nav-link" data-scroll-target="#c.-purpose-of-study">c.&nbsp;Purpose of study</a>
+  <ul class="collapse">
+  <li><a href="#d.-table-of-models" id="toc-d.-table-of-models" class="nav-link" data-scroll-target="#d.-table-of-models">d.&nbsp;Table of models</a></li>
+  <li><a href="#e.-run-the-models" id="toc-e.-run-the-models" class="nav-link" data-scroll-target="#e.-run-the-models">e. Run the models</a></li>
+  </ul></li>
+  </ul>
+</nav>
 </div>
 <main class="content" id="quarto-document-content">
 
@@ -118,22 +140,159 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p><a href="https://github.com/michaeltorbensen/ENVS-193DS_spring-2026_final.git">Github Repository</a></p>
+<section id="set-up" class="level1">
+<h1>Set-Up</h1>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggeffects)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MuMIn) <span class="co"># model selection</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DHARMa)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstatix)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># reading in data </span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: loading in packages and data</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggeffects)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MuMIn) <span class="co"># model selection</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DHARMa)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstatix)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># reading in data </span></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>bike_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/personal_data.csv"</span>))</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>nest_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/nest_data_final.csv"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+</section>
+<section id="problem-1.-research-writing" class="level1">
+<h1>Problem 1. Research Writing</h1>
+<section id="a.-transparent-statistical-methods" class="level2">
+<h2 class="anchored" data-anchor-id="a.-transparent-statistical-methods">a. Transparent statistical methods</h2>
+<p>In part 1, my co-workers used a generalized linear model (GLM) to show if distance to water edge predicts the probability of American Avocet microhabitat use. In part 2, my co-workers used a chi-squared test to see if there was a relationship between bird species and habitat types.</p>
+</section>
+<section id="b.-suggestions-for-rewriting" class="level2">
+<h2 class="anchored" data-anchor-id="b.-suggestions-for-rewriting">b. Suggestions for rewriting</h2>
+<section id="part-1" class="level4">
+<h4 class="anchored" data-anchor-id="part-1">Part 1</h4>
+<p>The distance between the habitat and water line was a significant predictor for the American Avocet using the microhabitat or not.</p>
+</section>
+<section id="part-2" class="level4">
+<h4 class="anchored" data-anchor-id="part-2">Part 2</h4>
+<p>The distribution of bird species varied significantly across habitat types (managed pond, non-tidal marsh, salt pond, tidal marsh, and tidal mudflat). Results suggest that the studied bird species (American Avocet, Forster’s Tern, Black-necked Stilt) prefer one habitat over another or may have different habitat uses.</p>
+</section>
+</section>
+<section id="c.-further-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="c.-further-analysis">c.&nbsp;Further analysis</h2>
+<p>Another variable that can influence the probability of American Avocet microhabitat use is native plant cover (continuous variable) in the area of study. It can be measured as percent cover 0–100% by visual estimation within fixed plots. This factor would influence the habitat use as higher native plant cover may reduce the accessible foraging habitat and visibility Americam Avocets need.</p>
+</section>
+</section>
+<section id="problem-2.-data-analysis" class="level1">
+<h1>Problem 2. Data Analysis</h1>
+<section id="a.-clean-and-wrangle" class="level2">
+<h2 class="anchored" data-anchor-id="a.-clean-and-wrangle">a. Clean and wrangle</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating new object </span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>nests_clean <span class="ot">&lt;-</span> nest_data <span class="sc">|&gt;</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Creating new columns to store taxonomic names </span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ant_species =</span> <span class="fu">case_match</span>(</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    ant_species,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"AB"</span> <span class="sc">~</span> <span class="st">"Crematogaster sjostedti"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"RRB"</span> <span class="sc">~</span> <span class="st">"Crematogaster mimosae"</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"TP"</span> <span class="sc">~</span> <span class="st">"Tetraponera penzigi"</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"BBR"</span> <span class="sc">~</span> <span class="st">"Crematogaster nigriceps"</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">|&gt;</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filtering to include certain species (C. mimosae, C. sjostedti, and C. nigriceps)</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ant_species <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Crematogaster mimosae"</span>, </span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Crematogaster sjostedti"</span>, </span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Crematogaster nigriceps"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Changing ant species order </span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ant_species =</span> <span class="fu">as_factor</span>(ant_species),</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>         <span class="at">ant_species =</span> <span class="fu">fct_relevel</span>(ant_species,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">"Crematogaster sjostedti"</span>,</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">"Crematogaster mimosae"</span>,</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">"Crematogaster nigriceps"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Selecting columns of interest for research questions</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(height_cm, ant_species, case_control)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Display new data object </span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(nests_clean)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   270 obs. of  3 variables:
+ $ height_cm   : num  392 310 513 154 324 ...
+ $ ant_species : Factor w/ 3 levels "Crematogaster sjostedti",..: 2 2 2 2 1 2 3 2 1 3 ...
+ $ case_control: int  1 0 0 0 0 1 0 0 0 1 ...</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display 10 random rows</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">slice_sample</span>(nests_clean, <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   height_cm             ant_species case_control
+1      248.5   Crematogaster mimosae            1
+2      140.0 Crematogaster nigriceps            0
+3       96.5 Crematogaster nigriceps            0
+4      210.5   Crematogaster mimosae            0
+5      185.0   Crematogaster mimosae            0
+6      204.5   Crematogaster mimosae            1
+7      133.5   Crematogaster mimosae            0
+8      431.5   Crematogaster mimosae            0
+9      157.5 Crematogaster nigriceps            1
+10     201.2   Crematogaster mimosae            1</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="b.-response-variable" class="level1">
+<h1>b. Response variable</h1>
+<p>In a biological context, the 0’s and 1’s represent a binary outcome of yes (1) or no (0). In the context of this study, a 1 represents the presence of a nest in a tree and 0 represents the absence of nests on a tree.</p>
+</section>
+<section id="c.-purpose-of-study" class="level1">
+<h1>c.&nbsp;Purpose of study</h1>
+<p>Tree height (numerical continuous variable), measured in cm, is one of the main predictors. Determined by the results section in paragraph 2, as tree height increase, the probability of nest occurrence would increase because height can protect the nests from ground predators. Yet, this is also dependent on what ant species are present in the tree, as stated in paragraph 3 of the results section.</p>
+<p>As established in paragraph 3 of the results section, the other main predictor is the species of ant, a categorical variable including <em>C. mimosae</em>, <em>C. sjostedti</em>, and <em>C. nigriceps</em>, present in the tree. The following information comes from paragraphs 3 and 4 of the introduction section. Since ants normally prey on nests in acacia trees, it’s usual that nest quantity will be higher in tree with less aggressive ant species like <em>C. sjostedti</em>. Nevertheless, since the acacia ants protect the tree fro, varying nest predators, it’s predicted that the quantity of nests will be higher in trees with more aggressive symbionts like <em>C. mimosea</em> and <em>C. nigriceps</em>.</p>
+<section id="d.-table-of-models" class="level2">
+<h2 class="anchored" data-anchor-id="d.-table-of-models">d.&nbsp;Table of models</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 17%">
+<col style="width: 23%">
+<col style="width: 39%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Model number</th>
+<th style="text-align: center;">Ant Species</th>
+<th style="text-align: center;">Tree Height</th>
+<th style="text-align: center;">Interaction?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">no interaction (+)</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">interaction (*)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="e.-run-the-models" class="level2">
+<h2 class="anchored" data-anchor-id="e.-run-the-models">e. Run the models</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: running models </span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># running model 1 (no interaction)</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>nest_mod1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(case_control <span class="sc">~</span> ant_species <span class="sc">+</span> height_cm, <span class="co"># "+" = no interaction</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> nests_clean, <span class="co"># from cleaned data set</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">family =</span> <span class="st">"binomial"</span>) <span class="co"># binomial data set</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># running model 2 (interaction)</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>nest_mod2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(case_control <span class="sc">~</span> ant_species <span class="sc">*</span> height_cm, <span class="co"># "*" = interaction</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> nests_clean, <span class="co"># from cleaned data set</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">family =</span> <span class="st">"binomial"</span>) <span class="co"># binomial data set</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
 
 </main>
 <!-- /main column -->

@@ -12,7 +12,10 @@ format:
 
 [Github Repository](https://github.com/michaeltorbensen/ENVS-193DS_spring-2026_final.git)
 
+# Set-Up
+
 ```{r}
+
 #| label: loading in packages and data
 library(tidyverse)
 library(janitor)
@@ -25,12 +28,102 @@ library(gtsummary)
 library(rstatix)
 
 # reading in data 
-
 bike_data <- read.csv(here::here("data/personal_data.csv"))
 nest_data <- read.csv(here::here("data/nest_data_final.csv"))
 
 ```
 
+# Problem 1. Research Writing 
+
+## a. Transparent statistical methods
+
+In part 1, my co-workers used a generalized linear model (GLM) to show if distance to water edge predicts the probability of American Avocet microhabitat use. In part 2, my co-workers used a chi-squared test to see if there was a relationship between bird species and habitat types. 
+
+## b. Suggestions for rewriting
+
+#### Part 1 
+
+The distance between the habitat and water line was a significant predictor for the American Avocet using the microhabitat or not. 
+
+#### Part 2
+
+The distribution of bird species varied significantly across habitat types (managed pond, non-tidal marsh, salt pond, tidal marsh, and tidal mudflat). Results suggest that the studied bird species (American Avocet, Forster’s Tern, Black-necked Stilt) prefer one habitat over another or may have different habitat uses. 
 
 
+## c. Further analysis
+
+Another variable that can influence the probability of American Avocet microhabitat use is native plant cover (continuous variable) in the area of study. It can be measured as percent cover 0–100% by visual estimation within fixed plots. This factor would influence the habitat use as higher native plant cover may reduce the accessible foraging habitat and visibility Americam Avocets need. 
+
+# Problem 2. Data Analysis
+
+## a. Clean and wrangle 
+
+```{r}
+#| label: cleaning-and-wrangling-data
+
+# Creating new object 
+nests_clean <- nest_data |> 
+  # Creating new columns to store taxonomic names 
+  mutate(ant_species = case_match(
+    ant_species,
+    "AB" ~ "Crematogaster sjostedti",
+    "RRB" ~ "Crematogaster mimosae",
+    "TP" ~ "Tetraponera penzigi",
+    "BBR" ~ "Crematogaster nigriceps",
+  )) |>
+  # Filtering to include certain species (C. mimosae, C. sjostedti, and C. nigriceps)
+  filter(ant_species %in% c("Crematogaster mimosae", 
+                            "Crematogaster sjostedti", 
+                            "Crematogaster nigriceps")) |> 
+  # Changing ant species order 
+  mutate(ant_species = as_factor(ant_species),
+         ant_species = fct_relevel(ant_species,
+                                       "Crematogaster sjostedti",
+                                       "Crematogaster mimosae",
+                                       "Crematogaster nigriceps")) |> 
+  # Selecting columns of interest for research questions
+  select(height_cm, ant_species, case_control)
+
+# Display new data object 
+str(nests_clean)
+
+# Display 10 random rows
+slice_sample(nests_clean, n = 10)
+
+```
+
+# b. Response variable 
+
+In a biological context, the 0's and 1's represent a binary outcome of yes (1) or no (0). In the context of this study, a 1 represents the presence of a nest in a tree and 0 represents the absence of nests on a tree. 
+
+# c. Purpose of study
+
+Tree height (numerical continuous variable), measured in cm, is one of the main predictors. Determined by the results section in paragraph 2, as tree height increase, the probability of nest occurrence would increase because height can protect the nests from ground predators. Yet, this is also dependent on what ant species are present in the tree, as stated in paragraph 3 of the results section. 
+
+As established in paragraph 3 of the results section, the other main predictor is the species of ant, a categorical variable including *C. mimosae*, *C. sjostedti*, and *C. nigriceps*, present in the tree. The following information comes from paragraphs 3 and 4 of the introduction section. Since ants normally prey on nests in acacia trees, it's usual that nest quantity will be higher in tree with less aggressive ant species like *C. sjostedti*. Nevertheless, since the acacia ants protect the tree fro, varying nest predators, it's predicted that the quantity of nests will be higher in trees with more aggressive symbionts like *C. mimosea* and *C. nigriceps*. 
+
+## d. Table of models 
+
+| Model number | Ant Species |   Tree Height   | Interaction?                |
+|--------------|:-----------:|:---------------:|:---------------------------:| 
+| 1            |      X      |        X        |      no interaction (+)     | 
+| 2            |      X      |        X        |      interaction (*)        |
+
+## e. Run the models 
+
+```{r}
+
+#| label: running models 
+
+# running model 1 (no interaction)
+nest_mod1 <- glm(case_control ~ ant_species + height_cm, # "+" = no interaction
+                 data = nests_clean, # from cleaned data set
+                 family = "binomial") # binomial data set
+
+# running model 2 (interaction)
+nest_mod2 <- glm(case_control ~ ant_species * height_cm, # "*" = interaction
+                data = nests_clean, # from cleaned data set
+                family = "binomial") # binomial data set
+
+```
 
