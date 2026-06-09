@@ -24,4 +24,4 @@ final quarto render and github commit/push series of spring quarter 2026
 
 ## Rendered Output
 
-[View rendered PDF](code/Final.pdf)
+[View rendered PDF](code/Final_doc.pdf)
