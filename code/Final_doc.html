@@ -257,17 +257,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display 10 random rows</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">slice_sample</span>(nests_clean, <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   height_cm             ant_species case_control
-1      427.0   Crematogaster mimosae            0
-2      156.0 Crematogaster sjostedti            0
-3      159.0   Crematogaster mimosae            0
-4      228.0   Crematogaster mimosae            0
-5      300.0   Crematogaster mimosae            0
-6       65.0 Crematogaster nigriceps            0
-7      207.0   Crematogaster mimosae            0
-8      405.5   Crematogaster mimosae            1
-9      522.0   Crematogaster mimosae            0
-10     183.0   Crematogaster mimosae            0</code></pre>
+<pre><code>   height_cm           ant_species case_control
+1      448.5 Crematogaster mimosae            0
+2      133.5 Crematogaster mimosae            0
+3      192.0 Crematogaster mimosae            0
+4      191.0 Crematogaster mimosae            1
+5      210.5 Crematogaster mimosae            0
+6      157.0 Crematogaster mimosae            0
+7      152.5 Crematogaster mimosae            1
+8       99.0 Crematogaster mimosae            0
+9      212.5 Crematogaster mimosae            0
+10      76.5 Crematogaster mimosae            0</code></pre>
 </div>
 </div>
 </section>
@@ -520,8 +520,8 @@ height_cm | Predicted |     95% CI
 </div>
 <section id="checking-assumptions" class="level3">
 <h3 class="anchored" data-anchor-id="checking-assumptions">Checking assumptions</h3>
-<section id="normality-test" class="level4">
-<h4 class="anchored" data-anchor-id="normality-test">Normality test</h4>
+<section id="linear-relationship-scatter-plot" class="level4">
+<h4 class="anchored" data-anchor-id="linear-relationship-scatter-plot">Linear relationship (scatter plot)</h4>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># defining mm:ss label format</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>mmss_format <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">sprintf</span>(<span class="st">"%d:%02d"</span>, x <span class="sc">%/%</span> <span class="dv">60</span>, x <span class="sc">%%</span> <span class="dv">60</span>)</span>
@@ -551,8 +551,12 @@ height_cm | Predicted |     95% CI
 </div>
 <p>Since I only have 27 observation per direction after splitting, slight departures from normality on the QQ plot are pretty expected. Even though normality isn’t precisely clear, I’ve assumed that the data is normally distributed.</p>
 </section>
-<section id="homoscedasticity-test" class="level4">
-<h4 class="anchored" data-anchor-id="homoscedasticity-test">Homoscedasticity test</h4>
+<section id="independent-errors" class="level4">
+<h4 class="anchored" data-anchor-id="independent-errors">Independent errors</h4>
+<p>Each observation represents a separate bike trip, so the error from one trip should not influence the error from another, satisfying the assumption of independent errors.</p>
+</section>
+<section id="run-the-analysis" class="level4">
+<h4 class="anchored" data-anchor-id="run-the-analysis">Run the analysis</h4>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>model_home_to_ucsb <span class="ot">&lt;-</span> <span class="fu">lm</span>(duration_sec <span class="sc">~</span> wind_speed_mph, <span class="at">data =</span> home_to_ucsb)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_home_to_ucsb) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -599,6 +603,9 @@ Multiple R-squared:  0.1309,    Adjusted R-squared:  0.09616
 F-statistic: 3.766 on 1 and 25 DF,  p-value: 0.06365</code></pre>
 </div>
 </div>
+</section>
+<section id="homoscedasticity-residuals-vs-fitted-plots" class="level4">
+<h4 class="anchored" data-anchor-id="homoscedasticity-residuals-vs-fitted-plots">Homoscedasticity (residuals vs fitted plots)</h4>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model_home_to_ucsb, <span class="at">which =</span> <span class="dv">1</span>, <span class="at">main =</span> <span class="st">"Home to UCSB - Residuals vs Fitted"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
@@ -619,8 +626,8 @@ F-statistic: 3.766 on 1 and 25 DF,  p-value: 0.06365</code></pre>
 </div>
 <p>The residuals vs fitted plots for the UCSB to home and home to UCSB directions show a relatively random scatter around zero with no systematic patterns, which supports the homoscedasticity assumption. However, a few outlying observations are present which may have slight influence on the model.</p>
 </section>
-<section id="normality-of-errors" class="level4">
-<h4 class="anchored" data-anchor-id="normality-of-errors">Normality of errors</h4>
+<section id="normality-of-errors-qq-plots" class="level4">
+<h4 class="anchored" data-anchor-id="normality-of-errors-qq-plots">Normality of errors (QQ plots)</h4>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># QQ plot compares the distribution of residuals against a theoretical </span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># normal distribution</span></span>
