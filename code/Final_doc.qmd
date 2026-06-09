@@ -423,9 +423,9 @@ Points represent individual bike trips, colored by direction of travel (blue = h
 
 ### Home to UCSB:
 
-Since wind speeds tend to pick up later in the day, wind speed was not a statistically significant predictor of trip duration for the home to UCSB direction (β = 3.14, t(25) = 1.02, p = 0.317). The model explained very little variation in trip duration (R² = 0.04), suggesting wind speed alone is a poor predictor of how long it takes to ride to school. 
+Since wind speeds tend to pick up later in the day, wind speed was not a statistically significant predictor of trip duration for the home to UCSB direction ($\beta$ = 3.14, t(25) = 1.02, p = 0.317). The model explained very little variation in trip duration (R^2 = 0.04), suggesting wind speed alone is a poor predictor of how long it takes to ride to school. 
 
 ### UCSB to Home:
 
-Wind speed showed a positive relationship with trip duration for the UCSB to home direction (β = 6.09, t(25) = 1.94, p = 0.064). The model explained approximately 13% of the variation in trip duration (R² = 0.13), suggesting a discreet trend where higher wind speeds are associated with longer rides home, though the result does not meet the conventional significance threshold of p < 0.05. 
+Wind speed showed a positive relationship with trip duration for the UCSB to home direction ($\beta$ = 6.09, t(25) = 1.94, p = 0.064). The model explained approximately 13% of the variation in trip duration (R^2 = 0.13), suggesting a discreet trend where higher wind speeds are associated with longer rides home, though the result does not meet the conventional significance threshold of p < 0.05. 
 
