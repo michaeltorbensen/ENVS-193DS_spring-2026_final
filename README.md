@@ -9,8 +9,17 @@ final quarto render and github commit/push series of spring quarter 2026
 
 ## Data and File Overview
 
-- `data/nest_data_final.csv` — raw nest data
-- `personal_data.csv` — raw bike commute data 
+.
+├── README.md
+├── code
+│   ├── final_doc.qmd
+│   ├── final_doc.pdf
+│   └── final_doc.html
+├── data
+│   └── metadata
+│   └──nest_data_final.csv
+│   └──personal_data.csv
+└── ENVS-193DS_spring-2026_final.Rproj
 
 ## Rendered Output
 
