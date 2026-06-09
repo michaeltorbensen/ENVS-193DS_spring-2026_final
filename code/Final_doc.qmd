@@ -372,6 +372,8 @@ For the home to UCSB trial, the QQ plot shows residuals following the theoretica
 
 ```{r}
 #| label: SLR visualization
+#| fig-width: 8
+#| fig-height: 6
 
 # base-layer: ggplot
 ggplot(data_clean,
@@ -401,7 +403,7 @@ ggplot(data_clean,
     title = "Effect of Wind Speed on Bike Trip Duration",
     subtitle = "Simple linear regression by direction of travel",
     x = "Wind Speed (mph)",
-    y = "Duration (seconds)",
+    y = "Travel Time (seconds)",
     color = "Direction",
     fill = "Direction") +
   # clean white background
