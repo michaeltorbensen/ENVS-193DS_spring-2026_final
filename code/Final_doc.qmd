@@ -69,8 +69,7 @@ nests_clean <- nest_data |>
     "AB" ~ "Crematogaster sjostedti",
     "RRB" ~ "Crematogaster mimosae",
     "TP" ~ "Tetraponera penzigi",
-    "BBR" ~ "Crematogaster nigriceps",
-  )) |>
+    "BBR" ~ "Crematogaster nigriceps")) |>
   # include only certain species (C. mimosae, C. sjostedti, and C. nigriceps)
   filter(ant_species %in% c("Crematogaster mimosae", 
                             "Crematogaster sjostedti", 
@@ -83,13 +82,13 @@ nests_clean <- nest_data |>
                                        "Crematogaster sjostedti",
                                        "Crematogaster mimosae",
                                        "Crematogaster nigriceps")) |> 
-  # Selecting columns of interest for research questions
+  # selecting columns of interest for research questions
   select(height_cm, ant_species, case_control)
 
-# Display new data object 
+# display new object 
 str(nests_clean)
 
-# Display 10 random rows
+# display 10 random rows
 slice_sample(nests_clean, n = 10)
 
 ```
@@ -102,11 +101,11 @@ In a biological context, the 0's and 1's represent an outcome occurring (1) or a
 
 Tree height (numerical continuous variable), measured in cm, is one of the main predictors. Determined by the results section in paragraph 2, as tree height increase, the probability of nest occurrence would increase because height can protect the nests from ground predators. Yet, this is also dependent on what ant species are present in the tree, as stated in paragraph 3 of the results section. 
 
-As established in paragraph 3 of the results section, the other main predictor is the species of ant, a categorical variable including *C. mimosae*, *C. sjostedti*, and *C. nigriceps*, present in the tree. The following information comes from paragraphs 3 and 4 of the introduction section. Since ants normally prey on nests in acacia trees, it's usual that nest quantity will be higher in tree with less aggressive ant species like *C. sjostedti*. Nevertheless, since the acacia ants protect the tree fro, varying nest predators, it's predicted that the quantity of nests will be higher in trees with more aggressive symbionts like *C. mimosea* and *C. nigriceps*. 
+As established in paragraph 3 of the results section, the other main predictor is the species of ant, a categorical variable including *C. mimosae*, *C. sjostedti*, and *C. nigriceps*, present in the acacia tree. The following information comes from paragraphs 3 and 4 of the introduction section. Since ants normally prey on nests in acacia trees, it's usual that nest quantity will be higher in tree with less aggressive ant species like *C. sjostedti*. Nevertheless, since the acacia ants protect the tree fro, varying nest predators, it's predicted that the quantity of nests will be higher in trees with more aggressive symbionts like *C. mimosea* and *C. nigriceps*. 
 
 ## d. Table of models 
 
-| Model number | Ant Species |   Tree Height   | Interaction?                |
+| Model number | Ant Species |   Tree Height   |        Interaction?         |
 |--------------|:-----------:|:---------------:|:---------------------------:| 
 | 1            |      X      |        X        |      no interaction (+)     | 
 | 2            |      X      |        X        |      interaction (*)        |
@@ -117,12 +116,12 @@ As established in paragraph 3 of the results section, the other main predictor i
 #| label: running models
  
 # model 1 (no interaction)
-nest_mod1 <- glm(case_control ~ ant_species + height_cm, # no interaction (+)
+nest_mod1 <- glm(case_control ~ ant_species + height_cm, # no interaction = (+)
                  data = nests_clean, # data from cleaned nest data set
                  family = "binomial") # binomial data set
 
 # model 2 (interaction)
-nest_mod2 <- glm(case_control ~ ant_species * height_cm, # interaction (*)
+nest_mod2 <- glm(case_control ~ ant_species * height_cm, # interaction = (*)
                 data = nests_clean, # data from cleaned nest data set
                 family = "binomial") # binomial data set
 
@@ -147,8 +146,7 @@ As concluded by Akaike’s Information Criterion (AIC), the best model for predi
 #| label: model diagnostics 
 
 # checking diagnostics using simulated residuals from DHARMa package 
-plot(
-  simulateResiduals(nest_mod2)) # using interaction model 2
+plot(simulateResiduals(nest_mod2)) # using interaction model 2
 
 ```
 
@@ -174,16 +172,16 @@ preds <- ggpredict(
 ```{r}
 #| label: generating figure using ggplot
 
-# base layer: ggplot
-ggplot(data = nests_clean, # data from cleaned nest data 
+# base-layer: ggplot
+ggplot(data = nests_clean, # using cleaned nests data 
        # x-axis: tree height
        # y-axis: nest probability
        mapping = aes(x = height_cm,
                      y = case_control)) + 
-  # first layer: individual data points 
+  # first-layer: individual data points 
   geom_point(mapping = aes(color = ant_species), # color by ant species
              shape = 20) + # shape = small circle 
-  # second layer: trend line based on predictions
+  # second-layer: trend line based on predictions
   geom_line(data = preds, 
             # x-axis: tree height
             # y-axis: probability
@@ -191,7 +189,7 @@ ggplot(data = nests_clean, # data from cleaned nest data
             mapping = aes(x = height_cm,
                           y = predicted,
                           color = ant_species)) +
-  # third layer: 95% confidence interval ribbon
+  # third-layer: 95% confidence interval ribbon
   geom_ribbon(data = preds, # data from model predictions
               # x-axis: tree height
               # y-axis: probability
@@ -223,9 +221,9 @@ ggplot(data = nests_clean, # data from cleaned nest data
                                       colour = "darkblue", # dark blue outline
                                       linewidth = 1), # width of outline
         panel.grid = element_blank(), # taking out grid lines
+        legend.position = "none", # removing legend from panel
         axis.ticks = element_line(
-          linewidth = 1), # major tick marks on x- and y-axis
-        legend.position = "none") # removing legend from panel
+          linewidth = 1)) # major tick marks on x- and y-axis
 
 ```
 
