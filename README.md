@@ -11,7 +11,6 @@ final quarto render and github commit/push series of spring quarter 2026
 
 - `data/nest_data_final.csv` — raw nest data
 - `personal_data.csv` — raw bike commute data 
-- `Final_doc.qmd` — Quarto document with analysis
 
 ## Rendered Output
 
