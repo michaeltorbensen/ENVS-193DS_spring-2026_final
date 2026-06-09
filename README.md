@@ -9,17 +9,18 @@ final quarto render and github commit/push series of spring quarter 2026
 
 ## Data and File Overview
 
+```
 .
 ├── README.md
 ├── code
-│   ├── final_doc.qmd
-│   ├── final_doc.pdf
-│   └── final_doc.html
+│   ├── Final_doc.qmd
+│   └── Final_doc.pdf
 ├── data
-│   └── metadata
-│   └──nest_data_final.csv
-│   └──personal_data.csv
+│   ├── nest_data_final.csv
+│   └── personal_data.csv
 └── ENVS-193DS_spring-2026_final.Rproj
+
+```
 
 ## Rendered Output
 
