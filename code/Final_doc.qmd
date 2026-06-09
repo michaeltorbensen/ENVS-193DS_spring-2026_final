@@ -3,7 +3,7 @@ title: "ENVS 193DS Final"
 author: "Michael Torbensen"
 date: June 05, 2026
 format:
-  html:
+  pdf:
     toc: TRUE
     execute: 
       message: FALSE
