@@ -132,6 +132,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#checking-assumptions" id="toc-checking-assumptions" class="nav-link" data-scroll-target="#checking-assumptions">Checking assumptions</a></li>
   </ul></li>
   <li><a href="#d.-create-a-visualization" id="toc-d.-create-a-visualization" class="nav-link" data-scroll-target="#d.-create-a-visualization">d.&nbsp;Create a visualization</a></li>
+  <li><a href="#e.-write-a-caption" id="toc-e.-write-a-caption" class="nav-link" data-scroll-target="#e.-write-a-caption">e. Write a caption</a></li>
+  <li><a href="#f.-write-about-your-results" id="toc-f.-write-about-your-results" class="nav-link" data-scroll-target="#f.-write-about-your-results">f.&nbsp;Write about your results</a>
+  <ul class="collapse">
+  <li><a href="#home-to-ucsb" id="toc-home-to-ucsb" class="nav-link" data-scroll-target="#home-to-ucsb">Home to UCSB:</a></li>
+  <li><a href="#ucsb-to-home" id="toc-ucsb-to-home" class="nav-link" data-scroll-target="#ucsb-to-home">UCSB to Home:</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -251,17 +257,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display 10 random rows</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">slice_sample</span>(nests_clean, <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   height_cm           ant_species case_control
-1      155.5 Crematogaster mimosae            0
-2      241.5 Crematogaster mimosae            0
-3      391.5 Crematogaster mimosae            1
-4      133.5 Crematogaster mimosae            0
-5      431.5 Crematogaster mimosae            0
-6      446.0 Crematogaster mimosae            0
-7      144.0 Crematogaster mimosae            0
-8      154.0 Crematogaster mimosae            0
-9      275.5 Crematogaster mimosae            0
-10     165.0 Crematogaster mimosae            0</code></pre>
+<pre><code>   height_cm             ant_species case_control
+1      427.0   Crematogaster mimosae            0
+2      156.0 Crematogaster sjostedti            0
+3      159.0   Crematogaster mimosae            0
+4      228.0   Crematogaster mimosae            0
+5      300.0   Crematogaster mimosae            0
+6       65.0 Crematogaster nigriceps            0
+7      207.0   Crematogaster mimosae            0
+8      405.5   Crematogaster mimosae            1
+9      522.0   Crematogaster mimosae            0
+10     183.0   Crematogaster mimosae            0</code></pre>
 </div>
 </div>
 </section>
@@ -492,7 +498,7 @@ height_cm | Predicted |     95% CI
 </section>
 <section id="b.-designing-an-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="b.-designing-an-analysis">b. Designing an analysis</h2>
-<p>The analysis that I am choosing to perform for my data set will be a simple linear regression. The specific question I am asking here is what variables cause the largest deviation in my travel duration from home to school and school to home. The response variable in my data set would be my travel duration (continuous quantitative variable) and the predictor variable I am choosing to highlight in this analysis is the wind speed at the time of my trip (continuous quantitative variable). A simple linear regression model would be a fit analysis for my data set because both variables are continuous, the model can explain how much variation in duration is caused by wind speed, and verify if there is a statistically significant relationship between the two variables.</p>
+<p>The analysis that I am choosing to perform for my data set will be a simple linear regression. The specific question I am asking here is what variables cause the largest deviation in my travel duration from home to school and school to home. The response variable in my data set would be my travel duration (continuous quantitative variable) and the predictor variable I am choosing to highlight in this analysis is the wind speed at the time of my trip (continuous quantitative variable). A simple linear regression model would be a fit analysis for my data set because both variables are continuous, the model can explain how much variation in duration is caused by wind speed, and verify if there is a statistically significant relationship between the two variables. Although it won’t be adding to any complexity of the analysis, I am also separating my panels by direction of trip to reduce noise in the upcoming graphs.</p>
 </section>
 <section id="c.-check-any-assumptions-and-run-your-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="c.-check-any-assumptions-and-run-your-analysis">c.&nbsp;Check any assumptions and run your analysis</h2>
@@ -533,7 +539,8 @@ height_cm | Predicted |     95% CI
 <span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Wind Speed vs Trip Duration by Direction"</span>,</span>
 <span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Wind Speed (mph)"</span>,</span>
 <span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Duration (seconds)"</span></span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -672,14 +679,15 @@ F-statistic: 3.766 on 1 and 25 DF,  p-value: 0.06365</code></pre>
 <span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Duration (seconds)"</span>,</span>
 <span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Direction"</span>,</span>
 <span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Direction"</span>) <span class="sc">+</span></span>
-<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># clean white background with no grid lines</span></span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># clean white background</span></span>
 <span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
 <span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
 <span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>    <span class="co"># adjusting title text</span></span>
 <span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">14</span>),</span>
 <span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>    <span class="co"># adjusting subtitle text</span></span>
 <span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"grey50"</span>, <span class="at">size =</span> <span class="dv">10</span>),</span>
-<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"bottom"</span>)   <span class="co"># taking out legend</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"bottom"</span>, <span class="co"># legend at bottom to not crowd space</span></span>
+<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a>      <span class="at">panel.grid =</span> <span class="fu">element_blank</span>()) <span class="co"># taking out grid lines</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -688,6 +696,21 @@ F-statistic: 3.766 on 1 and 25 DF,  p-value: 0.06365</code></pre>
 </div>
 </div>
 </div>
+</section>
+<section id="e.-write-a-caption" class="level2">
+<h2 class="anchored" data-anchor-id="e.-write-a-caption">e. Write a caption</h2>
+<p><strong>Figure 8. Effect of Wind Speed on Bike Trip Duration by Direction of Travel.</strong> Points represent individual bike trips, colored by direction of travel (blue = home to UCSB, red = UCSB to home). The solid lines represent the fitted simple linear regression model for each direction, with the shaded bands indicating the 95% confidence interval around each regression line. Both directions show a positive relationship between wind speed and trip duration, with the UCSB to home direction (red) showing a slightly steeper slope, suggesting wind speed has a stronger effect on duration when traveling home. The widening of the confidence intervals at higher wind speeds show increased uncertainty in the model due to fewer observations at those values of high wind speeds.</p>
+</section>
+<section id="f.-write-about-your-results" class="level2">
+<h2 class="anchored" data-anchor-id="f.-write-about-your-results">f.&nbsp;Write about your results</h2>
+<section id="home-to-ucsb" class="level3">
+<h3 class="anchored" data-anchor-id="home-to-ucsb">Home to UCSB:</h3>
+<p>Since wind speeds tend to pick up later in the day, wind speed was not a statistically significant predictor of trip duration for the home to UCSB direction (β = 3.14, t(25) = 1.02, p = 0.317). The model explained very little variation in trip duration (R² = 0.04), suggesting wind speed alone is a poor predictor of how long it takes to ride to school.</p>
+</section>
+<section id="ucsb-to-home" class="level3">
+<h3 class="anchored" data-anchor-id="ucsb-to-home">UCSB to Home:</h3>
+<p>Wind speed showed a positive relationship with trip duration for the UCSB to home direction (β = 6.09, t(25) = 1.94, p = 0.064). The model explained approximately 13% of the variation in trip duration (R² = 0.13), suggesting a discreet trend where higher wind speeds are associated with longer rides home, though the result does not meet the conventional significance threshold of p &lt; 0.05.</p>
+</section>
 </section>
 </section>
 

@@ -271,7 +271,7 @@ In week 9 workshop, I got some good and detailed feedback from my peers on my af
 
 ## b. Designing an analysis 
 
-The analysis that I am choosing to perform for my data set will be a simple linear regression. The specific question I am asking here is what variables cause the largest deviation in my travel duration from home to school and school to home. The response variable in my data set would be my travel duration (continuous quantitative variable) and the predictor variable I am choosing to highlight in this analysis is the wind speed at the time of my trip (continuous quantitative variable). A simple linear regression model would be a fit analysis for my data set because both variables are continuous, the model can explain how much variation in duration is caused by wind speed, and verify if there is a statistically significant relationship between the two variables. 
+The analysis that I am choosing to perform for my data set will be a simple linear regression. The specific question I am asking here is what variables cause the largest deviation in my travel duration from home to school and school to home. The response variable in my data set would be my travel duration (continuous quantitative variable) and the predictor variable I am choosing to highlight in this analysis is the wind speed at the time of my trip (continuous quantitative variable). A simple linear regression model would be a fit analysis for my data set because both variables are continuous, the model can explain how much variation in duration is caused by wind speed, and verify if there is a statistically significant relationship between the two variables. Although it won't be adding to any complexity of the analysis, I am also separating my panels by direction of trip to reduce noise in the upcoming graphs. 
 
 ## c. Check any assumptions and run your analysis
 
@@ -317,7 +317,8 @@ ggplot(data_clean,
     title = "Wind Speed vs Trip Duration by Direction",
     x = "Wind Speed (mph)",
     y = "Duration (seconds)"
-  )
+  ) +
+  theme_minimal()
 
 ```
 
@@ -395,15 +396,30 @@ ggplot(data_clean,
     y = "Duration (seconds)",
     color = "Direction",
     fill = "Direction") +
-  # clean white background with no grid lines
+  # clean white background
   theme_minimal() +
   theme(
     # adjusting title text
     plot.title = element_text(face = "bold", size = 14),
     # adjusting subtitle text
     plot.subtitle = element_text(color = "grey50", size = 10),
-    legend.position = "bottom")   # taking out legend
+    legend.position = "bottom", # legend at bottom to not crowd space
+      panel.grid = element_blank()) # taking out grid lines
 
 ```
 
+## e. Write a caption
+
+**Figure 8. Effect of Wind Speed on Bike Trip Duration by Direction of Travel.** 
+Points represent individual bike trips, colored by direction of travel (blue = home to UCSB, red = UCSB to home). The solid lines represent the fitted simple linear regression model for each direction, with the shaded bands indicating the 95% confidence interval around each regression line. Both directions show a positive relationship between wind speed and trip duration, with the UCSB to home direction (red) showing a slightly steeper slope, suggesting wind speed has a stronger effect on duration when traveling home. The widening of the confidence intervals at higher wind speeds show increased uncertainty in the model due to fewer observations at those values of high wind speeds. 
+
+## f. Write about your results 
+
+### Home to UCSB:
+
+Since wind speeds tend to pick up later in the day, wind speed was not a statistically significant predictor of trip duration for the home to UCSB direction (β = 3.14, t(25) = 1.02, p = 0.317). The model explained very little variation in trip duration (R² = 0.04), suggesting wind speed alone is a poor predictor of how long it takes to ride to school. 
+
+### UCSB to Home:
+
+Wind speed showed a positive relationship with trip duration for the UCSB to home direction (β = 6.09, t(25) = 1.94, p = 0.064). The model explained approximately 13% of the variation in trip duration (R² = 0.13), suggesting a discreet trend where higher wind speeds are associated with longer rides home, though the result does not meet the conventional significance threshold of p < 0.05. 
 
