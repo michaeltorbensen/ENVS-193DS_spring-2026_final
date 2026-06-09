@@ -126,6 +126,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#patterns" id="toc-patterns" class="nav-link" data-scroll-target="#patterns">Patterns</a></li>
   <li><a href="#feedback" id="toc-feedback" class="nav-link" data-scroll-target="#feedback">Feedback</a></li>
   </ul></li>
+  <li><a href="#b.-designing-an-analysis" id="toc-b.-designing-an-analysis" class="nav-link" data-scroll-target="#b.-designing-an-analysis">b. Designing an analysis</a></li>
+  <li><a href="#c.-check-any-assumptions-and-run-your-analysis" id="toc-c.-check-any-assumptions-and-run-your-analysis" class="nav-link" data-scroll-target="#c.-check-any-assumptions-and-run-your-analysis">c.&nbsp;Check any assumptions and run your analysis</a>
+  <ul class="collapse">
+  <li><a href="#checking-assumptions" id="toc-checking-assumptions" class="nav-link" data-scroll-target="#checking-assumptions">Checking assumptions</a></li>
+  </ul></li>
+  <li><a href="#d.-create-a-visualization" id="toc-d.-create-a-visualization" class="nav-link" data-scroll-target="#d.-create-a-visualization">d.&nbsp;Create a visualization</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -209,9 +215,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="a.-clean-and-wrangle" class="level2">
 <h2 class="anchored" data-anchor-id="a.-clean-and-wrangle">a. Clean and wrangle</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating new object </span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># creating new object </span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>nests_clean <span class="ot">&lt;-</span> nest_data <span class="sc">|&gt;</span> </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Creating new columns to store taxonomic names </span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># creating new columns to store taxonomic names </span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ant_species =</span> <span class="fu">case_match</span>(</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    ant_species,</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"AB"</span> <span class="sc">~</span> <span class="st">"Crematogaster sjostedti"</span>,</span>
@@ -219,21 +225,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"TP"</span> <span class="sc">~</span> <span class="st">"Tetraponera penzigi"</span>,</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"BBR"</span> <span class="sc">~</span> <span class="st">"Crematogaster nigriceps"</span>,</span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">|&gt;</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filtering to include certain species (C. mimosae, C. sjostedti, and C. nigriceps)</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># include only certain species (C. mimosae, C. sjostedti, and C. nigriceps)</span></span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ant_species <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Crematogaster mimosae"</span>, </span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Crematogaster sjostedti"</span>, </span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Crematogaster nigriceps"</span>)) <span class="sc">|&gt;</span> </span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># mutating data </span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ant_species =</span> <span class="fu">as_factor</span>(ant_species), <span class="co"># making sure data is written out as text</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>         <span class="at">ant_species =</span> <span class="fu">fct_relevel</span>(ant_species, <span class="co"># making sure species will be listed in this order</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">"Crematogaster sjostedti"</span>,</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">"Crematogaster mimosae"</span>,</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">"Crematogaster nigriceps"</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Selecting columns of interest for research questions</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(height_cm, ant_species, case_control)</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Display new data object </span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(nests_clean)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ant_species =</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>           <span class="fu">as_factor</span>(ant_species), <span class="co"># data written out as text</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>         <span class="at">ant_species =</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>           <span class="fu">fct_relevel</span>(ant_species, <span class="co"># species will be listed in this order</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">"Crematogaster sjostedti"</span>,</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">"Crematogaster mimosae"</span>,</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">"Crematogaster nigriceps"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Selecting columns of interest for research questions</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(height_cm, ant_species, case_control)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Display new data object </span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(nests_clean)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>'data.frame':   270 obs. of  3 variables:
  $ height_cm   : num  392 310 513 154 324 ...
@@ -243,17 +251,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display 10 random rows</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">slice_sample</span>(nests_clean, <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   height_cm             ant_species case_control
-1      390.0 Crematogaster nigriceps            1
-2      201.0 Crematogaster nigriceps            1
-3      311.0   Crematogaster mimosae            0
-4      302.5   Crematogaster mimosae            0
-5      231.5   Crematogaster mimosae            1
-6      114.0   Crematogaster mimosae            0
-7      237.0 Crematogaster nigriceps            1
-8      404.5   Crematogaster mimosae            0
-9      122.0 Crematogaster sjostedti            0
-10     175.0   Crematogaster mimosae            0</code></pre>
+<pre><code>   height_cm           ant_species case_control
+1      155.5 Crematogaster mimosae            0
+2      241.5 Crematogaster mimosae            0
+3      391.5 Crematogaster mimosae            1
+4      133.5 Crematogaster mimosae            0
+5      431.5 Crematogaster mimosae            0
+6      446.0 Crematogaster mimosae            0
+7      144.0 Crematogaster mimosae            0
+8      154.0 Crematogaster mimosae            0
+9      275.5 Crematogaster mimosae            0
+10     165.0 Crematogaster mimosae            0</code></pre>
 </div>
 </div>
 </section>
@@ -404,12 +412,14 @@ nest_mod1  4 258.8940</code></pre>
 <span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Tree Height (cm)"</span>, </span>
 <span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Probability of Bird Nesting In Tree"</span>) <span class="sc">+</span> </span>
 <span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>  <span class="co"># changing theme from default </span></span>
-<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"transparent"</span>, <span class="co"># no panel background</span></span>
-<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">colour =</span> <span class="st">"darkblue"</span>, <span class="co"># dark blue outline</span></span>
-<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">linewidth =</span> <span class="dv">1</span>), <span class="co"># width of outline</span></span>
-<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(), <span class="co"># taking out grid lines</span></span>
-<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.ticks =</span> <span class="fu">element_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>), <span class="co"># major tick marks on x- and y-axis</span></span>
-<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="co"># removing legend from panel</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.background =</span> </span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>          <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"transparent"</span>, <span class="co"># no panel background</span></span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">colour =</span> <span class="st">"darkblue"</span>, <span class="co"># dark blue outline</span></span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">linewidth =</span> <span class="dv">1</span>), <span class="co"># width of outline</span></span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(), <span class="co"># taking out grid lines</span></span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.ticks =</span> <span class="fu">element_line</span>(</span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>          <span class="at">linewidth =</span> <span class="dv">1</span>), <span class="co"># major tick marks on x- and y-axis</span></span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="co"># removing legend from panel</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -469,14 +479,215 @@ height_cm | Predicted |     95% CI
 </section>
 <section id="similarities" class="level3">
 <h3 class="anchored" data-anchor-id="similarities">Similarities</h3>
-<p>I do see some similarities in between the two visualizations. One being the effect that wind had on my travel duration (stronger wind makes = longer duration) as well as the effect that stop lights had on my travel duration (more stop lights = longer duration).</p>
+<p>It’s hard to find any similarities between the all the visualizations I have because one is a hand-drawn bike and the other are graphs. The only similarity I can find between the two visualizations are the main variables I used as the variables that have the largest effect on my travel duration (minus the addition of stop lights for my affective visualization).</p>
 </section>
 <section id="patterns" class="level3">
 <h3 class="anchored" data-anchor-id="patterns">Patterns</h3>
+<p>The patterns change between visualizations mostly in part because I have many more listed observations in my latter visualization. The pattern in the first visualization showed that my trial #2 had shorter travel durations and that higher windspeeds caused longer durations. The pattern in my affective visualization showed that trial #1 had shorter durations (different than HW2), stronger winds caused a longer duration (the same as HW2) and stop lights also caused a longer duration too (not accounted for in HW2).</p>
 </section>
 <section id="feedback" class="level3">
 <h3 class="anchored" data-anchor-id="feedback">Feedback</h3>
+<p>In week 9 workshop, I got some good and detailed feedback from my peers on my affective visualization. The main thing I took into account was making it more noticeable that I was referencing two completely different trials (the bikes) as well as two different trips (home to ucsb vs.&nbsp;UCSB to home). I made sure that I chose colors that were drastically different from each other to denote the different trials and wrote on each tire which trip was which. Also, my peers mentioned that I should add a shape to the fastest trip in that data set, as well as do something to denote what the longest trip was. For those, I added a star to the tip of the fastest trip shape, and made the longest trip be the only one to touch the inner part of the wheel.</p>
 </section>
+</section>
+<section id="b.-designing-an-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="b.-designing-an-analysis">b. Designing an analysis</h2>
+<p>The analysis that I am choosing to perform for my data set will be a simple linear regression. The specific question I am asking here is what variables cause the largest deviation in my travel duration from home to school and school to home. The response variable in my data set would be my travel duration (continuous quantitative variable) and the predictor variable I am choosing to highlight in this analysis is the wind speed at the time of my trip (continuous quantitative variable). A simple linear regression model would be a fit analysis for my data set because both variables are continuous, the model can explain how much variation in duration is caused by wind speed, and verify if there is a statistically significant relationship between the two variables.</p>
+</section>
+<section id="c.-check-any-assumptions-and-run-your-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="c.-check-any-assumptions-and-run-your-analysis">c.&nbsp;Check any assumptions and run your analysis</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># creating new object for clean data</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>data_clean <span class="ot">&lt;-</span> bike_data <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># cleaning data names by turning spaces into underscores</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">|&gt;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># only selecting categories of interest</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(duration_mm_ss, </span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>         wind_speed_mph, </span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>         direction_of_trip) <span class="sc">|&gt;</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># converting duration to seconds </span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">duration_sec =</span> <span class="fu">as.numeric</span>(<span class="fu">ms</span>(duration_mm_ss)))</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co"># splitting by direction</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>home_to_ucsb <span class="ot">&lt;-</span> data_clean <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="st">`</span><span class="at">direction_of_trip</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"home to UCSB"</span>)</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>ucsb_to_home <span class="ot">&lt;-</span> data_clean <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="st">`</span><span class="at">direction_of_trip</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"UCSB to home"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="checking-assumptions" class="level3">
+<h3 class="anchored" data-anchor-id="checking-assumptions">Checking assumptions</h3>
+<section id="normality-test" class="level4">
+<h4 class="anchored" data-anchor-id="normality-test">Normality test</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># defining mm:ss label format</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>mmss_format <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">sprintf</span>(<span class="st">"%d:%02d"</span>, x <span class="sc">%/%</span> <span class="dv">60</span>, x <span class="sc">%%</span> <span class="dv">60</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># first layer: ggplot </span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_clean,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>       <span class="co"># x-axis: wind speed</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>       <span class="co"># y-axis: travel duration</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> wind_speed_mph, <span class="at">y =</span> duration_sec)) <span class="sc">+</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># second layer: data points</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># creating panels for each direction of trip </span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> direction_of_trip) <span class="sc">+</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Wind Speed vs Trip Duration by Direction"</span>,</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Wind Speed (mph)"</span>,</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Duration (seconds)"</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Final_doc_files/figure-html/ggplot-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Since I only have 27 observation per direction after splitting, slight departures from normality on the QQ plot are pretty expected. Even though normality isn’t precisely clear, I’ve assumed that the data is normally distributed.</p>
+</section>
+<section id="homoscedasticity-test" class="level4">
+<h4 class="anchored" data-anchor-id="homoscedasticity-test">Homoscedasticity test</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>model_home_to_ucsb <span class="ot">&lt;-</span> <span class="fu">lm</span>(duration_sec <span class="sc">~</span> wind_speed_mph, <span class="at">data =</span> home_to_ucsb)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_home_to_ucsb) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = duration_sec ~ wind_speed_mph, data = home_to_ucsb)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-109.895  -76.037   -3.321   64.534  134.673 
+
+Coefficients:
+               Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     676.759     30.969  21.853   &lt;2e-16 ***
+wind_speed_mph    3.142      3.079   1.021    0.317    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 79.64 on 25 degrees of freedom
+Multiple R-squared:  0.03999,   Adjusted R-squared:  0.001594 
+F-statistic: 1.042 on 1 and 25 DF,  p-value: 0.3172</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>model_ucsb_to_home <span class="ot">&lt;-</span> <span class="fu">lm</span>(duration_sec <span class="sc">~</span> wind_speed_mph, <span class="at">data =</span> ucsb_to_home)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_ucsb_to_home)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = duration_sec ~ wind_speed_mph, data = ucsb_to_home)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-105.69  -60.42  -37.15   55.76  163.12 
+
+Coefficients:
+               Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     665.874     36.427  18.280 5.58e-16 ***
+wind_speed_mph    6.091      3.139   1.941   0.0637 .  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 86.18 on 25 degrees of freedom
+Multiple R-squared:  0.1309,    Adjusted R-squared:  0.09616 
+F-statistic: 3.766 on 1 and 25 DF,  p-value: 0.06365</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model_home_to_ucsb, <span class="at">which =</span> <span class="dv">1</span>, <span class="at">main =</span> <span class="st">"Home to UCSB - Residuals vs Fitted"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Final_doc_files/figure-html/residual%20vs%20fitted%20plot-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model_ucsb_to_home, <span class="at">which =</span> <span class="dv">1</span>, <span class="at">main =</span> <span class="st">"UCSB to Home - Residuals vs Fitted"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Final_doc_files/figure-html/residual%20vs%20fitted%20plot-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The residuals vs fitted plots for the UCSB to home and home to UCSB directions show a relatively random scatter around zero with no systematic patterns, which supports the homoscedasticity assumption. However, a few outlying observations are present which may have slight influence on the model.</p>
+</section>
+<section id="normality-of-errors" class="level4">
+<h4 class="anchored" data-anchor-id="normality-of-errors">Normality of errors</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># QQ plot compares the distribution of residuals against a theoretical </span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># normal distribution</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model_home_to_ucsb, <span class="at">which =</span> <span class="dv">2</span>, <span class="at">main =</span> <span class="st">"Home to UCSB - QQ Plot"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Final_doc_files/figure-html/normality%20check-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model_ucsb_to_home, <span class="at">which =</span> <span class="dv">2</span>, <span class="at">main =</span> <span class="st">"UCSB to Home - QQ Plot"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Final_doc_files/figure-html/normality%20check-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>For the home to UCSB trial, the QQ plot shows residuals following the theoretical normal distribution closely, with only minor stray points at the upper tail driven by a few outlying observations. Similarly for the UCSB to home trials, the residuals follow the diagonal line really well through the center of the distribution, with slight deviation at the upper tail. Given the small sample size, these stray points aren’t too concerning and the normality assumption should be considered met.</p>
+</section>
+</section>
+</section>
+<section id="d.-create-a-visualization" class="level2">
+<h2 class="anchored" data-anchor-id="d.-create-a-visualization">d.&nbsp;Create a visualization</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># base-layer: ggplot</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_clean,</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>       <span class="co"># x-axis: wind speed</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>       <span class="co"># y-axis: duration</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>       <span class="co"># colored by direction of trip </span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> wind_speed_mph,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> duration_sec,</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> direction_of_trip,</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> direction_of_trip)) <span class="sc">+</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># second-layer: adding data points </span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">2.5</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># third-layer: adding 95% confidence interval ribbon</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># manually set colors for each direction </span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"home to UCSB"</span> <span class="ot">=</span> <span class="st">"#2E86AB"</span>, <span class="st">"UCSB to home"</span> <span class="ot">=</span> <span class="st">"#E84855"</span>),</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Home to UCSB"</span>, <span class="st">"UCSB to Home"</span>)) <span class="sc">+</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># manually set color for the 95% CI ribbon</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"home to UCSB"</span> <span class="ot">=</span> <span class="st">"#2E86AB"</span>, <span class="st">"UCSB to home"</span> <span class="ot">=</span> <span class="st">"#E84855"</span>),</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Home to UCSB"</span>, <span class="st">"UCSB to Home"</span>)) <span class="sc">+</span></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># changing the labels and title </span></span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Effect of Wind Speed on Bike Trip Duration"</span>,</span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Simple linear regression by direction of travel"</span>,</span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Wind Speed (mph)"</span>,</span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Duration (seconds)"</span>,</span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Direction"</span>,</span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Direction"</span>) <span class="sc">+</span></span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># clean white background with no grid lines</span></span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>    <span class="co"># adjusting title text</span></span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>    <span class="co"># adjusting subtitle text</span></span>
+<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"grey50"</span>, <span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"bottom"</span>)   <span class="co"># taking out legend</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Final_doc_files/figure-html/SLR%20visualization-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 </section>
 

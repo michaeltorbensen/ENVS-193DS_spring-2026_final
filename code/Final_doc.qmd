@@ -61,9 +61,9 @@ Another variable that can influence the probability of American Avocet microhabi
 ```{r}
 #| label: cleaning data 
 
-# Creating new object 
+# creating new object 
 nests_clean <- nest_data |> 
-  # Creating new columns to store taxonomic names 
+  # creating new columns to store taxonomic names 
   mutate(ant_species = case_match(
     ant_species,
     "AB" ~ "Crematogaster sjostedti",
@@ -71,13 +71,15 @@ nests_clean <- nest_data |>
     "TP" ~ "Tetraponera penzigi",
     "BBR" ~ "Crematogaster nigriceps",
   )) |>
-  # Filtering to include certain species (C. mimosae, C. sjostedti, and C. nigriceps)
+  # include only certain species (C. mimosae, C. sjostedti, and C. nigriceps)
   filter(ant_species %in% c("Crematogaster mimosae", 
                             "Crematogaster sjostedti", 
                             "Crematogaster nigriceps")) |> 
   # mutating data 
-  mutate(ant_species = as_factor(ant_species), # making sure data is written out as text
-         ant_species = fct_relevel(ant_species, # making sure species will be listed in this order
+  mutate(ant_species =
+           as_factor(ant_species), # data written out as text
+         ant_species =
+           fct_relevel(ant_species, # species will be listed in this order
                                        "Crematogaster sjostedti",
                                        "Crematogaster mimosae",
                                        "Crematogaster nigriceps")) |> 
@@ -216,11 +218,13 @@ ggplot(data = nests_clean, # data from cleaned nest data
   labs(x = "Tree Height (cm)", 
        y = "Probability of Bird Nesting In Tree") + 
   # changing theme from default 
-  theme(panel.background = element_rect(fill = "transparent", # no panel background
+  theme(panel.background = 
+          element_rect(fill = "transparent", # no panel background
                                       colour = "darkblue", # dark blue outline
                                       linewidth = 1), # width of outline
         panel.grid = element_blank(), # taking out grid lines
-        axis.ticks = element_line(linewidth = 1), # major tick marks on x- and y-axis
+        axis.ticks = element_line(
+          linewidth = 1), # major tick marks on x- and y-axis
         legend.position = "none") # removing legend from panel
 
 ```
@@ -255,11 +259,151 @@ My visualization in homework 2 did not show any trend that was recognizable sinc
 
 ### Similarities 
 
-I do see some similarities in between the two visualizations. One being the effect that wind had on my travel duration (stronger wind makes = longer duration) as well as the effect that stop lights had on my travel duration (more stop lights = longer duration). 
+It's hard to find any similarities between the all the visualizations I have because one is a hand-drawn bike and the other are graphs. The only similarity I can find between the two visualizations are the main variables I used as the variables that have the largest effect on my travel duration (minus the addition of stop lights for my affective visualization). 
 
 ### Patterns
 
+The patterns change between visualizations mostly in part because I have many more listed observations in my latter visualization. The pattern in the first visualization showed that my trial #2 had shorter travel durations and that higher windspeeds caused longer durations. The pattern in my affective visualization showed that trial #1 had shorter durations (different than HW2), stronger winds caused a longer duration (the same as HW2) and stop lights also caused a longer duration too (not accounted for in HW2). 
 
 ### Feedback
+
+In week 9 workshop, I got some good and detailed feedback from my peers on my affective visualization. The main thing I took into account was making it more noticeable that I was referencing two completely different trials (the bikes) as well as two different trips (home to ucsb vs. UCSB to home). I made sure that I chose colors that were drastically different from each other to denote the different trials and wrote on each tire which trip was which. Also, my peers mentioned that I should add a shape to the fastest trip in that data set, as well as do something to denote what the longest trip was. For those, I added a star to the tip of the fastest trip shape, and made the longest trip be the only one to touch the inner part of the wheel. 
+
+## b. Designing an analysis 
+
+The analysis that I am choosing to perform for my data set will be a simple linear regression. The specific question I am asking here is what variables cause the largest deviation in my travel duration from home to school and school to home. The response variable in my data set would be my travel duration (continuous quantitative variable) and the predictor variable I am choosing to highlight in this analysis is the wind speed at the time of my trip (continuous quantitative variable). A simple linear regression model would be a fit analysis for my data set because both variables are continuous, the model can explain how much variation in duration is caused by wind speed, and verify if there is a statistically significant relationship between the two variables. 
+
+## c. Check any assumptions and run your analysis
+
+```{r}
+#| label: data cleaning
+
+# creating new object for clean data
+data_clean <- bike_data |>
+  # cleaning data names by turning spaces into underscores
+  clean_names() |>
+  # only selecting categories of interest
+  select(duration_mm_ss, 
+         wind_speed_mph, 
+         direction_of_trip) |>
+  # converting duration to seconds 
+  mutate(duration_sec = as.numeric(ms(duration_mm_ss)))
+
+# splitting by direction
+home_to_ucsb <- data_clean |> filter(`direction_of_trip` == "home to UCSB")
+ucsb_to_home <- data_clean |> filter(`direction_of_trip` == "UCSB to home")
+```
+
+### Checking assumptions 
+
+#### Normality test 
+
+```{r}
+#| label: ggplot 
+
+# defining mm:ss label format
+mmss_format <- function(x) sprintf("%d:%02d", x %/% 60, x %% 60)
+
+# first layer: ggplot 
+ggplot(data_clean,
+       # x-axis: wind speed
+       # y-axis: travel duration
+       aes(x = wind_speed_mph, y = duration_sec)) +
+  # second layer: data points
+  geom_point() +
+  # creating panels for each direction of trip 
+  facet_wrap(~ direction_of_trip) +
+  labs(
+    title = "Wind Speed vs Trip Duration by Direction",
+    x = "Wind Speed (mph)",
+    y = "Duration (seconds)"
+  )
+
+```
+
+Since I only have 27 observation per direction after splitting, slight departures from normality on the QQ plot are pretty expected. Even though normality isn't precisely clear, I've assumed that the data is normally distributed.
+
+#### Homoscedasticity test
+
+```{r}
+#| label: fit models for homoscedasticity check
+
+model_home_to_ucsb <- lm(duration_sec ~ wind_speed_mph, data = home_to_ucsb)
+summary(model_home_to_ucsb) 
+
+model_ucsb_to_home <- lm(duration_sec ~ wind_speed_mph, data = ucsb_to_home)
+summary(model_ucsb_to_home)
+
+```
+
+```{r}
+#| label: residual vs fitted plot
+
+plot(model_home_to_ucsb, which = 1, main = "Home to UCSB - Residuals vs Fitted")
+plot(model_ucsb_to_home, which = 1, main = "UCSB to Home - Residuals vs Fitted")
+
+```
+
+The residuals vs fitted plots for the UCSB to home and home to UCSB directions show a relatively random scatter around zero with no systematic patterns, which supports the homoscedasticity assumption. However, a few outlying observations are present which may have slight influence on the model.
+
+#### Normality of errors 
+
+```{r}
+#| label: normality check
+
+# QQ plot compares the distribution of residuals against a theoretical 
+# normal distribution
+plot(model_home_to_ucsb, which = 2, main = "Home to UCSB - QQ Plot")
+plot(model_ucsb_to_home, which = 2, main = "UCSB to Home - QQ Plot")
+```
+
+For the home to UCSB trial, the QQ plot shows residuals following the theoretical normal distribution closely, with only minor stray points at the upper tail driven by a few outlying observations. Similarly for the UCSB to home trials, the residuals follow the diagonal line really well through the center of the distribution, with slight deviation at the upper tail. Given the small sample size, these stray points aren't too concerning and the normality assumption should be considered met.
+
+## d. Create a visualization
+
+```{r}
+#| label: SLR visualization
+
+# base-layer: ggplot
+ggplot(data_clean,
+       # x-axis: wind speed
+       # y-axis: duration
+       # colored by direction of trip 
+       aes(x = wind_speed_mph,
+           y = duration_sec,
+           color = direction_of_trip,
+           fill = direction_of_trip)) +
+  # second-layer: adding data points 
+  geom_point(size = 2.5, alpha = 0.7) +
+  # third-layer: adding 95% confidence interval ribbon
+  geom_smooth(method = "lm",
+              se = TRUE,
+              alpha = 0.2) +
+  # manually set colors for each direction 
+  scale_color_manual(
+    values = c("home to UCSB" = "#2E86AB", "UCSB to home" = "#E84855"),
+    labels = c("Home to UCSB", "UCSB to Home")) +
+  # manually set color for the 95% CI ribbon
+  scale_fill_manual(
+    values = c("home to UCSB" = "#2E86AB", "UCSB to home" = "#E84855"),
+    labels = c("Home to UCSB", "UCSB to Home")) +
+  # changing the labels and title 
+  labs(
+    title = "Effect of Wind Speed on Bike Trip Duration",
+    subtitle = "Simple linear regression by direction of travel",
+    x = "Wind Speed (mph)",
+    y = "Duration (seconds)",
+    color = "Direction",
+    fill = "Direction") +
+  # clean white background with no grid lines
+  theme_minimal() +
+  theme(
+    # adjusting title text
+    plot.title = element_text(face = "bold", size = 14),
+    # adjusting subtitle text
+    plot.subtitle = element_text(color = "grey50", size = 10),
+    legend.position = "bottom")   # taking out legend
+
+```
 
 
