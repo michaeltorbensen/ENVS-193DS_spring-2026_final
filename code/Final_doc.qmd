@@ -15,8 +15,8 @@ format:
 # Set-Up
 
 ```{r}
-
 #| label: loading in packages and data
+
 library(tidyverse)
 library(janitor)
 library(here)
@@ -59,6 +59,7 @@ Another variable that can influence the probability of American Avocet microhabi
 ## a. Clean and wrangle 
 
 ```{r}
+#| label: cleaning data 
 
 # Creating new object 
 nests_clean <- nest_data |> 
@@ -111,7 +112,8 @@ As established in paragraph 3 of the results section, the other main predictor i
 ## e. Run the models 
 
 ```{r}
-
+#| label: running models
+ 
 # model 1 (no interaction)
 nest_mod1 <- glm(case_control ~ ant_species + height_cm, # no interaction (+)
                  data = nests_clean, # data from cleaned nest data set
@@ -127,6 +129,7 @@ nest_mod2 <- glm(case_control ~ ant_species * height_cm, # interaction (*)
 ## f. Select the best model
 
 ```{r}
+#| label: Akaike’s Information Criterion
 
 AICc(nest_mod1,
      nest_mod2) |>
@@ -139,6 +142,7 @@ As concluded by Akaike’s Information Criterion (AIC), the best model for predi
 ## g. Check the diagnostics 
 
 ```{r}
+#| label: model diagnostics 
 
 # checking diagnostics using simulated residuals from DHARMa package 
 plot(
@@ -152,7 +156,8 @@ plot(
 
 ```{r}
 #| label: model predictions
-# Object for prediction
+
+# object for prediction
 preds <- ggpredict(
   nest_mod2,
   # denoting which predictors to use 
@@ -162,7 +167,99 @@ preds <- ggpredict(
          ant_species = group)
 ```
 
-## i. 
+### Creating figure
 
+```{r}
+#| label: generating figure using ggplot
+
+# base layer: ggplot
+ggplot(data = nests_clean, # data from cleaned nest data 
+       # x-axis: tree height
+       # y-axis: nest probability
+       mapping = aes(x = height_cm,
+                     y = case_control)) + 
+  # first layer: individual data points 
+  geom_point(mapping = aes(color = ant_species), # color by ant species
+             shape = 20) + # shape = small circle 
+  # second layer: trend line based on predictions
+  geom_line(data = preds, 
+            # x-axis: tree height
+            # y-axis: probability
+            # colored by species
+            mapping = aes(x = height_cm,
+                          y = predicted,
+                          color = ant_species)) +
+  # third layer: 95% confidence interval ribbon
+  geom_ribbon(data = preds, # data from model predictions
+              # x-axis: tree height
+              # y-axis: probability
+              # colored by species
+              mapping = aes(x = height_cm,
+                            y = predicted,
+                            ymin = conf.low,
+                            ymax = conf.high, 
+                            fill = ant_species),
+                        alpha = 0.4) + # changing transparency of ribbon
+  # making one panel for each species
+  facet_wrap(~ ant_species) + 
+  # customizing colors to categorize by species
+  scale_color_manual(values = c(
+    "Crematogaster mimosae" = "#c91a34",
+    "Crematogaster sjostedti" = "#fa8b14", 
+    "Crematogaster nigriceps" = "#ffc421"))  +
+  # customizing colors to categorize by species 
+  scale_fill_manual(values = c(
+    "Crematogaster mimosae" = "#c91a34",
+    "Crematogaster sjostedti" = "#fa8b14", 
+    "Crematogaster nigriceps" = "#ffc421")) + 
+  # labeling x- and y-axis
+  labs(x = "Tree Height (cm)", 
+       y = "Probability of Bird Nesting In Tree") + 
+  # changing theme from default 
+  theme(panel.background = element_rect(fill = "transparent", # no panel background
+                                      colour = "darkblue", # dark blue outline
+                                      linewidth = 1), # width of outline
+        panel.grid = element_blank(), # taking out grid lines
+        axis.ticks = element_line(linewidth = 1), # major tick marks on x- and y-axis
+        legend.position = "none") # removing legend from panel
+
+```
+
+## i. Write a caption for your figure.
+
+** Figure 1. Probability of bird nest in an acacia tree changes due to varying tree height and ant species.** Plots vary by ant species (seen at top tabs) as well as color (**C. sjostedti** = orange, **C. mimosae** = red, **C. nigriceps** = yellow). The points represent individual nesting observations, the ribbons expanding from the line are 95% confidence intervals, and the trend line represents the models predictions of whether or not a nest is present given the tree height (cm) and ant species. The probability of a bird nest in an acacia tree is either 1 (the presence of a nest(s) in the tree) or 0 (absence of nest(s) in the tree). Data sourced from Lujan, Ema et al. 2023. “Symbiotic acacia ants drive nesting behavior by birds in an African savanna.” Biotropica 55:6. doi: 10.1111/btp.13276.
+
+## j. Calculate model predictions 
+
+```{r}
+#| label: model prediction calculation
+
+# ggpredict for model predictions at 600cm height only
+ggpredict(nest_mod2, # data from prediction model 2
+          terms = c("height_cm [600]",
+                    "ant_species")) 
+
+```
+
+## k. Interpret results 
+
+The predicted probability of nest occurrence at 600 cm tree height (tallest tree in the data set) for **C. sjostedti** is 0.2 (95% CI: [0.00, 0.99]), for **C. mimosae** is 0.74 (95% CI: [0.48, 0.90]), and for **C. nigriceps** was 1.00 (95% CI: [1.00,1.00]. Tree height has a positive relationship with probability of bird nesting in trees occupied by all three ant species, though the strength and shape of this relationship differed vastly. The relationship was most gradual for *C. mimosae*, most abrupt for *C. nigriceps* (which showed a near-threshold response at low heights), and weakest with greatest uncertainty for *C. sjostedti*. Biologically speaking, more aggressive ant symbionts like **C. nigriceps** and **C. mimosae** are known to defend their host tree from nest predators like snakes and raptors. Even beyond aggression, **C. nigriceps** physically remodels tree growth by pruning apical buds and producing denser canopies. Birds appear to exploit this defensive behavior and extra suitable habitat to reduce nest predation risk. 
+
+# Problem 3. Affective and exploratory visualizations 
+
+## a. Comparing visualizations 
+
+### Differences 
+
+My visualization in homework 2 did not show any trend that was recognizable since there were not that many data points, but the next visualization (affective visualization) showed a decent pattern in both trials and trips as there were many more observations to work with. The first scatter plot I made in homework 2 showed that my duration of trip #2 was faster than my trip #1 duration while the affective visualization showed the opposite. 
+
+### Similarities 
+
+I do see some similarities in between the two visualizations. One being the effect that wind had on my travel duration (stronger wind makes = longer duration) as well as the effect that stop lights had on my travel duration (more stop lights = longer duration). 
+
+### Patterns
+
+
+### Feedback
 
 
