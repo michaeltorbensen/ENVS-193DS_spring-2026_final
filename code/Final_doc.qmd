@@ -105,10 +105,10 @@ As established in paragraph 3 of the results section, the other main predictor i
 
 ## d. Table of models 
 
-| Model number | Ant Species |   Tree Height   |        Interaction?         |
-|--------------|:-----------:|:---------------:|:---------------------------:| 
-| 1            |      X      |        X        |      no interaction (+)     | 
-| 2            |      X      |        X        |      interaction (*)        |
+| Model Number | Ant Species | Tree Height  |     Model Description          |
+|--------------|:-----------:|:------------:|:------------------------------:| 
+| 1            |      X      |       X      |Both terms w/ no interaction (+)| 
+| 2            |      X      |       X      |Both terms with interaction (*) |
 
 ## e. Run the models 
 
@@ -144,11 +144,15 @@ As concluded by Akaike’s Information Criterion (AIC), the best model for predi
 
 ```{r}
 #| label: model diagnostics 
+#| fig-width: 10
+#| fig-height: 8
 
 # checking diagnostics using simulated residuals from DHARMa package 
 plot(simulateResiduals(nest_mod2)) # using interaction model 2
 
 ```
+
+The QQ residuals plot shows a uniform distribution of the data as all points fall along the reference line. One can also see no clear patterns in the residuals vs predicted plot, so one can assume all residuals are randomly distributed. The assumptions are met and we can move forward with the generalized linear model. 
 
 ## h. Visualize the model predictions 
 
@@ -171,6 +175,8 @@ preds <- ggpredict(
 
 ```{r}
 #| label: generating figure using ggplot
+#| fig-width: 9
+#| fig-height: 6
 
 # base-layer: ggplot
 ggplot(data = nests_clean, # using cleaned nests data 
@@ -229,7 +235,7 @@ ggplot(data = nests_clean, # using cleaned nests data
 
 ## i. Write a caption for your figure.
 
-** Figure 1. Probability of bird nest in an acacia tree changes due to varying tree height and ant species.** Plots vary by ant species (seen at top tabs) as well as color (**C. sjostedti** = orange, **C. mimosae** = red, **C. nigriceps** = yellow). The points represent individual nesting observations, the ribbons expanding from the line are 95% confidence intervals, and the trend line represents the models predictions of whether or not a nest is present given the tree height (cm) and ant species. The probability of a bird nest in an acacia tree is either 1 (the presence of a nest(s) in the tree) or 0 (absence of nest(s) in the tree). Data sourced from Lujan, Ema et al. 2023. “Symbiotic acacia ants drive nesting behavior by birds in an African savanna.” Biotropica 55:6. doi: 10.1111/btp.13276.
+**Figure 1. Probability of bird nest in an acacia tree changes due to varying tree height and ant species.** Plots vary by ant species (seen at top tabs) as well as color (*C. sjostedti* = orange, *C. mimosae* = red, *C. nigriceps* = yellow). The points represent individual nesting observations, the ribbons expanding from the line are 95% confidence intervals, and the trend line represents the models predictions of whether or not a nest is present given the tree height (cm) and ant species. The probability of a bird nest in an acacia tree is either 1 (the presence of a nest(s) in the tree) or 0 (absence of nest(s) in the tree). Data sourced from Lujan, Ema et al. 2023. “Symbiotic acacia ants drive nesting behavior by birds in an African savanna.” Biotropica 55:6. doi: 10.1111/btp.13276.
 
 ## j. Calculate model predictions 
 
@@ -245,7 +251,7 @@ ggpredict(nest_mod2, # data from prediction model 2
 
 ## k. Interpret results 
 
-The predicted probability of nest occurrence at 600 cm tree height (tallest tree in the data set) for **C. sjostedti** is 0.2 (95% CI: [0.00, 0.99]), for **C. mimosae** is 0.74 (95% CI: [0.48, 0.90]), and for **C. nigriceps** was 1.00 (95% CI: [1.00,1.00]. Tree height has a positive relationship with probability of bird nesting in trees occupied by all three ant species, though the strength and shape of this relationship differed vastly. The relationship was most gradual for *C. mimosae*, most abrupt for *C. nigriceps* (which showed a near-threshold response at low heights), and weakest with greatest uncertainty for *C. sjostedti*. Biologically speaking, more aggressive ant symbionts like **C. nigriceps** and **C. mimosae** are known to defend their host tree from nest predators like snakes and raptors. Even beyond aggression, **C. nigriceps** physically remodels tree growth by pruning apical buds and producing denser canopies. Birds appear to exploit this defensive behavior and extra suitable habitat to reduce nest predation risk. 
+The predicted probability of nest occurrence at 600 cm tree height (tallest tree in the data set) for *C. sjostedti* is 0.2 (95% CI: [0.00, 0.99]), for *C. mimosae* is 0.74 (95% CI: [0.48, 0.90]), and for *C. nigriceps* was 1.00 (95% CI: [1.00,1.00]. Tree height has a positive relationship with probability of bird nesting in trees occupied by all three ant species, though the strength and shape of this relationship differed vastly. The relationship was most gradual for *C. mimosae*, most abrupt for *C. nigriceps* (which showed a near-threshold response at low heights), and weakest with greatest uncertainty for *C. sjostedti*. Biologically speaking, more aggressive ant symbionts like *C. nigriceps* and *C. mimosae* are known to defend their host tree from nest predators like snakes and raptors. Even beyond aggression, *C. nigriceps* physically remodels tree growth by pruning apical buds and producing denser canopies. Birds appear to exploit this defensive behavior and extra suitable habitat to reduce nest predation risk. 
 
 # Problem 3. Affective and exploratory visualizations 
 
@@ -299,9 +305,6 @@ ucsb_to_home <- data_clean |> filter(`direction_of_trip` == "UCSB to home")
 ```{r}
 #| label: ggplot 
 
-# defining mm:ss label format
-mmss_format <- function(x) sprintf("%d:%02d", x %/% 60, x %% 60)
-
 # first layer: ggplot 
 ggplot(data_clean,
        # x-axis: wind speed
@@ -314,9 +317,10 @@ ggplot(data_clean,
   labs(
     title = "Wind Speed vs Trip Duration by Direction",
     x = "Wind Speed (mph)",
-    y = "Duration (seconds)"
+    y = "Travel Time (seconds)"
   ) +
-  theme_minimal()
+  theme_bw() +
+  theme(panel.grid = element_blank())
 
 ```
 
@@ -414,16 +418,16 @@ ggplot(data_clean,
 
 ## e. Write a caption
 
-**Figure 8. Effect of Wind Speed on Bike Trip Duration by Direction of Travel.** 
+**Figure 2. Effect of Wind Speed on Bike Trip Duration by Direction of Travel.**
 Points represent individual bike trips, colored by direction of travel (blue = home to UCSB, red = UCSB to home). The solid lines represent the fitted simple linear regression model for each direction, with the shaded bands indicating the 95% confidence interval around each regression line. Both directions show a positive relationship between wind speed and trip duration, with the UCSB to home direction (red) showing a slightly steeper slope, suggesting wind speed has a stronger effect on duration when traveling home. The widening of the confidence intervals at higher wind speeds show increased uncertainty in the model due to fewer observations at those values of high wind speeds. 
 
 ## f. Write about your results 
 
 ### Home to UCSB:
 
-Since wind speeds tend to pick up later in the day, wind speed was not a statistically significant predictor of trip duration for the home to UCSB direction ($\beta$ = 3.14, t(25) = 1.02, p = 0.317). The model explained very little variation in trip duration (R^2 = 0.04), suggesting wind speed alone is a poor predictor of how long it takes to ride to school. 
+Since wind speeds tend to pick up later in the day, wind speed was not a statistically significant predictor of trip duration for the home to UCSB direction ($\beta$ = 3.14, t(25) = 1.02, p = 0.317). The model explained very little variation in trip duration ($R^2$ = 0.04), suggesting wind speed alone is a poor predictor of how long it takes to ride to school. 
 
 ### UCSB to Home:
 
-Wind speed showed a positive relationship with trip duration for the UCSB to home direction ($\beta$ = 6.09, t(25) = 1.94, p = 0.064). The model explained approximately 13% of the variation in trip duration (R^2 = 0.13), suggesting a discreet trend where higher wind speeds are associated with longer rides home, though the result does not meet the conventional significance threshold of p < 0.05. 
+Wind speed showed a positive relationship with trip duration for the UCSB to home direction ($\beta$ = 6.09, t(25) = 1.94, p = 0.064). The model explained approximately 13% of the variation in trip duration ($R^2$ = 0.13), suggesting a discreet trend where higher wind speeds are associated with longer rides home, though the result does not meet the conventional significance threshold of p < 0.05. 
 
