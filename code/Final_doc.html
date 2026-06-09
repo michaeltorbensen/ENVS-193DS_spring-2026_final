@@ -90,7 +90,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#problem-1.-research-writing" id="toc-problem-1.-research-writing" class="nav-link" data-scroll-target="#problem-1.-research-writing">Problem 1. Research Writing</a>
   <ul class="collapse">
   <li><a href="#a.-transparent-statistical-methods" id="toc-a.-transparent-statistical-methods" class="nav-link" data-scroll-target="#a.-transparent-statistical-methods">a. Transparent statistical methods</a></li>
-  <li><a href="#b.-suggestions-for-rewriting" id="toc-b.-suggestions-for-rewriting" class="nav-link" data-scroll-target="#b.-suggestions-for-rewriting">b. Suggestions for rewriting</a></li>
+  <li><a href="#b.-suggestions-for-rewriting" id="toc-b.-suggestions-for-rewriting" class="nav-link" data-scroll-target="#b.-suggestions-for-rewriting">b. Suggestions for rewriting</a>
+  <ul class="collapse">
+  <li><a href="#part-1" id="toc-part-1" class="nav-link" data-scroll-target="#part-1">Part 1</a></li>
+  <li><a href="#part-2" id="toc-part-2" class="nav-link" data-scroll-target="#part-2">Part 2</a></li>
+  </ul></li>
   <li><a href="#c.-further-analysis" id="toc-c.-further-analysis" class="nav-link" data-scroll-target="#c.-further-analysis">c.&nbsp;Further analysis</a></li>
   </ul></li>
   <li><a href="#problem-2.-data-analysis" id="toc-problem-2.-data-analysis" class="nav-link" data-scroll-target="#problem-2.-data-analysis">Problem 2. Data Analysis</a>
@@ -102,6 +106,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#d.-table-of-models" id="toc-d.-table-of-models" class="nav-link" data-scroll-target="#d.-table-of-models">d.&nbsp;Table of models</a></li>
   <li><a href="#e.-run-the-models" id="toc-e.-run-the-models" class="nav-link" data-scroll-target="#e.-run-the-models">e. Run the models</a></li>
+  <li><a href="#f.-select-the-best-model" id="toc-f.-select-the-best-model" class="nav-link" data-scroll-target="#f.-select-the-best-model">f.&nbsp;Select the best model</a></li>
+  <li><a href="#g.-check-the-diagnostics" id="toc-g.-check-the-diagnostics" class="nav-link" data-scroll-target="#g.-check-the-diagnostics">g. Check the diagnostics</a></li>
+  <li><a href="#h.-visualize-the-model-predictions" id="toc-h.-visualize-the-model-predictions" class="nav-link" data-scroll-target="#h.-visualize-the-model-predictions">h. Visualize the model predictions</a>
+  <ul class="collapse">
+  <li><a href="#generating-model-predictions" id="toc-generating-model-predictions" class="nav-link" data-scroll-target="#generating-model-predictions">Generating model predictions</a></li>
+  </ul></li>
+  <li><a href="#i." id="toc-i." class="nav-link" data-scroll-target="#i.">i.</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -167,12 +178,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="b.-suggestions-for-rewriting" class="level2">
 <h2 class="anchored" data-anchor-id="b.-suggestions-for-rewriting">b. Suggestions for rewriting</h2>
-<section id="part-1" class="level4">
-<h4 class="anchored" data-anchor-id="part-1">Part 1</h4>
+<section id="part-1" class="level3">
+<h3 class="anchored" data-anchor-id="part-1">Part 1</h3>
 <p>The distance between the habitat and water line was a significant predictor for the American Avocet using the microhabitat or not.</p>
 </section>
-<section id="part-2" class="level4">
-<h4 class="anchored" data-anchor-id="part-2">Part 2</h4>
+<section id="part-2" class="level3">
+<h3 class="anchored" data-anchor-id="part-2">Part 2</h3>
 <p>The distribution of bird species varied significantly across habitat types (managed pond, non-tidal marsh, salt pond, tidal marsh, and tidal mudflat). Results suggest that the studied bird species (American Avocet, Forster’s Tern, Black-necked Stilt) prefer one habitat over another or may have different habitat uses.</p>
 </section>
 </section>
@@ -200,9 +211,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ant_species <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Crematogaster mimosae"</span>, </span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Crematogaster sjostedti"</span>, </span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Crematogaster nigriceps"</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Changing ant species order </span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ant_species =</span> <span class="fu">as_factor</span>(ant_species),</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>         <span class="at">ant_species =</span> <span class="fu">fct_relevel</span>(ant_species,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># mutating data </span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ant_species =</span> <span class="fu">as_factor</span>(ant_species), <span class="co"># making sure data is written out as text</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>         <span class="at">ant_species =</span> <span class="fu">fct_relevel</span>(ant_species, <span class="co"># making sure species will be listed in this order</span></span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">"Crematogaster sjostedti"</span>,</span>
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">"Crematogaster mimosae"</span>,</span>
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">"Crematogaster nigriceps"</span>)) <span class="sc">|&gt;</span> </span>
@@ -221,23 +232,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">slice_sample</span>(nests_clean, <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   height_cm             ant_species case_control
-1      248.5   Crematogaster mimosae            1
-2      140.0 Crematogaster nigriceps            0
-3       96.5 Crematogaster nigriceps            0
-4      210.5   Crematogaster mimosae            0
-5      185.0   Crematogaster mimosae            0
-6      204.5   Crematogaster mimosae            1
-7      133.5   Crematogaster mimosae            0
-8      431.5   Crematogaster mimosae            0
-9      157.5 Crematogaster nigriceps            1
-10     201.2   Crematogaster mimosae            1</code></pre>
+1      158.5   Crematogaster mimosae            0
+2      200.5   Crematogaster mimosae            0
+3      123.0   Crematogaster mimosae            0
+4      241.5   Crematogaster mimosae            0
+5      180.0 Crematogaster sjostedti            0
+6      391.5   Crematogaster mimosae            1
+7      288.5   Crematogaster mimosae            1
+8      215.0   Crematogaster mimosae            0
+9      238.5   Crematogaster mimosae            0
+10     327.0   Crematogaster mimosae            0</code></pre>
 </div>
 </div>
 </section>
 </section>
 <section id="b.-response-variable" class="level1">
 <h1>b. Response variable</h1>
-<p>In a biological context, the 0’s and 1’s represent a binary outcome of yes (1) or no (0). In the context of this study, a 1 represents the presence of a nest in a tree and 0 represents the absence of nests on a tree.</p>
+<p>In a biological context, the 0’s and 1’s represent an outcome occurring (1) or an outcome not occurring (0). In the context of this study, a 1 represents the presence of a nest in a tree and 0 represents the absence of nests on a tree.</p>
 </section>
 <section id="c.-purpose-of-study" class="level1">
 <h1>c.&nbsp;Purpose of study</h1>
@@ -279,18 +290,64 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="e.-run-the-models" class="level2">
 <h2 class="anchored" data-anchor-id="e.-run-the-models">e. Run the models</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: running models </span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># running model 1 (no interaction)</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>nest_mod1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(case_control <span class="sc">~</span> ant_species <span class="sc">+</span> height_cm, <span class="co"># "+" = no interaction</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> nests_clean, <span class="co"># from cleaned data set</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">family =</span> <span class="st">"binomial"</span>) <span class="co"># binomial data set</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># running model 2 (interaction)</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>nest_mod2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(case_control <span class="sc">~</span> ant_species <span class="sc">*</span> height_cm, <span class="co"># "*" = interaction</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> nests_clean, <span class="co"># from cleaned data set</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">family =</span> <span class="st">"binomial"</span>) <span class="co"># binomial data set</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># model 1 (no interaction)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>nest_mod1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(case_control <span class="sc">~</span> ant_species <span class="sc">+</span> height_cm, <span class="co"># no interaction (+)</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> nests_clean, <span class="co"># data from cleaned nest data set</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">family =</span> <span class="st">"binomial"</span>) <span class="co"># binomial data set</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># model 2 (interaction)</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>nest_mod2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(case_control <span class="sc">~</span> ant_species <span class="sc">*</span> height_cm, <span class="co"># interaction (*)</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> nests_clean, <span class="co"># data from cleaned nest data set</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">family =</span> <span class="st">"binomial"</span>) <span class="co"># binomial data set</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+</section>
+<section id="f.-select-the-best-model" class="level2">
+<h2 class="anchored" data-anchor-id="f.-select-the-best-model">f.&nbsp;Select the best model</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AICc</span>(nest_mod1,</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>     nest_mod2) <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(AICc)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          df     AICc
+nest_mod2  6 238.1236
+nest_mod1  4 258.8940</code></pre>
+</div>
+</div>
+<p>As concluded by Akaike’s Information Criterion (AIC), the best model for predicting the probability of bird nest presence is the interaction model between tree height and ant species since it has the lowest AIC.</p>
+</section>
+<section id="g.-check-the-diagnostics" class="level2">
+<h2 class="anchored" data-anchor-id="g.-check-the-diagnostics">g. Check the diagnostics</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># checking diagnostics using simulated residuals from DHARMa package </span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">simulateResiduals</span>(nest_mod2)) <span class="co"># using interaction model 2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Final_doc_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="h.-visualize-the-model-predictions" class="level2">
+<h2 class="anchored" data-anchor-id="h.-visualize-the-model-predictions">h. Visualize the model predictions</h2>
+<section id="generating-model-predictions" class="level3">
+<h3 class="anchored" data-anchor-id="generating-model-predictions">Generating model predictions</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Object for prediction</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">ggpredict</span>(</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  nest_mod2,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># denoting which predictors to use </span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"height_cm [74:598 by = 1]"</span>, <span class="st">"ant_species"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># renaming columns for figure </span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">height_cm =</span> x, </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">ant_species =</span> group)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="i." class="level2">
+<h2 class="anchored" data-anchor-id="i.">i.</h2>
 </section>
 </section>
 

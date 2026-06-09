@@ -41,11 +41,11 @@ In part 1, my co-workers used a generalized linear model (GLM) to show if distan
 
 ## b. Suggestions for rewriting
 
-#### Part 1 
+### Part 1 
 
 The distance between the habitat and water line was a significant predictor for the American Avocet using the microhabitat or not. 
 
-#### Part 2
+### Part 2
 
 The distribution of bird species varied significantly across habitat types (managed pond, non-tidal marsh, salt pond, tidal marsh, and tidal mudflat). Results suggest that the studied bird species (American Avocet, Forster’s Tern, Black-necked Stilt) prefer one habitat over another or may have different habitat uses. 
 
@@ -59,7 +59,6 @@ Another variable that can influence the probability of American Avocet microhabi
 ## a. Clean and wrangle 
 
 ```{r}
-#| label: cleaning-and-wrangling-data
 
 # Creating new object 
 nests_clean <- nest_data |> 
@@ -75,9 +74,9 @@ nests_clean <- nest_data |>
   filter(ant_species %in% c("Crematogaster mimosae", 
                             "Crematogaster sjostedti", 
                             "Crematogaster nigriceps")) |> 
-  # Changing ant species order 
-  mutate(ant_species = as_factor(ant_species),
-         ant_species = fct_relevel(ant_species,
+  # mutating data 
+  mutate(ant_species = as_factor(ant_species), # making sure data is written out as text
+         ant_species = fct_relevel(ant_species, # making sure species will be listed in this order
                                        "Crematogaster sjostedti",
                                        "Crematogaster mimosae",
                                        "Crematogaster nigriceps")) |> 
@@ -94,7 +93,7 @@ slice_sample(nests_clean, n = 10)
 
 # b. Response variable 
 
-In a biological context, the 0's and 1's represent a binary outcome of yes (1) or no (0). In the context of this study, a 1 represents the presence of a nest in a tree and 0 represents the absence of nests on a tree. 
+In a biological context, the 0's and 1's represent an outcome occurring (1) or an outcome not occurring (0). In the context of this study, a 1 represents the presence of a nest in a tree and 0 represents the absence of nests on a tree. 
 
 # c. Purpose of study
 
@@ -113,17 +112,57 @@ As established in paragraph 3 of the results section, the other main predictor i
 
 ```{r}
 
-#| label: running models 
-
-# running model 1 (no interaction)
-nest_mod1 <- glm(case_control ~ ant_species + height_cm, # "+" = no interaction
-                 data = nests_clean, # from cleaned data set
+# model 1 (no interaction)
+nest_mod1 <- glm(case_control ~ ant_species + height_cm, # no interaction (+)
+                 data = nests_clean, # data from cleaned nest data set
                  family = "binomial") # binomial data set
 
-# running model 2 (interaction)
-nest_mod2 <- glm(case_control ~ ant_species * height_cm, # "*" = interaction
-                data = nests_clean, # from cleaned data set
+# model 2 (interaction)
+nest_mod2 <- glm(case_control ~ ant_species * height_cm, # interaction (*)
+                data = nests_clean, # data from cleaned nest data set
                 family = "binomial") # binomial data set
 
 ```
+
+## f. Select the best model
+
+```{r}
+
+AICc(nest_mod1,
+     nest_mod2) |>
+  arrange(AICc)
+
+```
+
+As concluded by Akaike’s Information Criterion (AIC), the best model for predicting the probability of bird nest presence is the interaction model between tree height and ant species since it has the lowest AIC. 
+
+## g. Check the diagnostics 
+
+```{r}
+
+# checking diagnostics using simulated residuals from DHARMa package 
+plot(
+  simulateResiduals(nest_mod2)) # using interaction model 2
+
+```
+
+## h. Visualize the model predictions 
+
+### Generating model predictions 
+
+```{r}
+#| label: model predictions
+# Object for prediction
+preds <- ggpredict(
+  nest_mod2,
+  # denoting which predictors to use 
+  terms = c("height_cm [74:598 by = 1]", "ant_species")) |> 
+  # renaming columns for figure 
+  rename(height_cm = x, 
+         ant_species = group)
+```
+
+## i. 
+
+
 
